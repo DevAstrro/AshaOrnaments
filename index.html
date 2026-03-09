@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asha Ornaments | Luxury Collection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- 1. SETUP --- */
+        :root { --gold: #d4af37; --glass: rgba(255, 255, 255, 0.1); --border: rgba(212, 175, 55, 0.3); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Montserrat', sans-serif; background: #000; overflow: hidden; height: 100vh; }
+
+        /* --- 2. ANIMATED BACKGROUND --- */
+        .bg-image {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://images.unsplash.com/photo-1615555673898-3a72661f0a5d?q=80&w=2000&auto=format&fit=crop') center/cover;
+            opacity: 0.6;
+            animation: breathe 20s infinite alternate; /* Slow zoom effect */
+            z-index: 0;
+        }
+
+        /* Dark Overlay */
+        .overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+            z-index: 1;
+        }
+
+        /* --- 3. GOLD DUST PARTICLES (The "Not Plain" Factor) --- */
+        .particle {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--gold);
+            animation: floatUp linear infinite;
+            z-index: 2;
+            opacity: 0;
+        }
+        /* Creating multiple particles with different speeds/positions */
+        .p1 { left: 10%; bottom: -10px; animation-duration: 7s; animation-delay: 0s; }
+        .p2 { left: 30%; bottom: -10px; animation-duration: 10s; animation-delay: 2s; }
+        .p3 { left: 70%; bottom: -10px; animation-duration: 6s; animation-delay: 1s; }
+        .p4 { left: 90%; bottom: -10px; animation-duration: 9s; animation-delay: 3s; }
+        .p5 { left: 50%; bottom: -10px; animation-duration: 8s; animation-delay: 5s; }
+
+        /* --- 4. CENTER GLASS CARD --- */
+        .hero-container {
+            position: relative; z-index: 3;
+            height: 100%; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center;
+        }
+
+        .glass-box {
+            background: var(--glass);
+            backdrop-filter: blur(10px); /* The Blur Effect */
+            -webkit-backdrop-filter: blur(10px);
+            padding: 60px 80px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            animation: fadeUp 1.5s ease;
+            max-width: 800px;
+            margin-bottom: 50px; /* Space for footer */
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            color: #fff;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #ddd;
+            margin-bottom: 40px;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        /* --- 5. GLOWING BUTTON --- */
+        .shop-btn {
+            display: inline-block;
+            padding: 18px 50px;
+            background: transparent;
+            color: var(--gold);
+            border: 2px solid var(--gold);
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shop-btn:hover {
+            background: var(--gold);
+            color: #000;
+            box-shadow: 0 0 20px var(--gold); /* Glowing effect */
+        }
+
+        /* --- 6. FOOTER --- */
+        footer {
+            position: absolute; bottom: 30px; width: 100%; text-align: center;
+            z-index: 10; color: rgba(255,255,255,0.6); font-size: 0.9rem;
+        }
+        
+        .heart-msg { font-family: 'Cinzel', serif; margin-bottom: 5px; color: #fff; }
+
+        .email-copy {
+            color: var(--gold); cursor: pointer; position: relative; font-weight: bold;
+            transition: 0.3s; padding: 5px 10px; border-radius: 4px;
+        }
+        .email-copy:hover { background: rgba(212, 175, 55, 0.2); color: #fff; }
+        
+        /* Popup Toast */
+        #toast {
+            visibility: hidden; min-width: 200px; background-color: white; color: #000;
+            text-align: center; border-radius: 50px; padding: 12px; position: fixed; z-index: 100;
+            bottom: 80px; left: 50%; transform: translateX(-50%); font-weight: bold;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+
+        /* --- ANIMATIONS --- */
+        @keyframes breathe { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+        @keyframes floatUp { 
+            0% { transform: translateY(0) scale(0.5); opacity: 0; } 
+            20% { opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.2); opacity: 0; } 
+        }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadein { from{bottom: 40px; opacity: 0;} to{bottom: 80px; opacity: 1;} }
+        @keyframes fadeout { from{bottom: 80px; opacity: 1;} to{bottom: 40px; opacity: 0;} }
+        
+        /* Mobile adjustment */
+        @media(max-width: 768px) {
+            .glass-box { padding: 30px; width: 90%; }
+            h1 { font-size: 2.5rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-image"></div>
+    <div class="overlay"></div>
+
+    <div class="particle p1"></div>
+    <div class="particle p2"></div>
+    <div class="particle p3"></div>
+    <div class="particle p4"></div>
+    <div class="particle p5"></div>
+
+    <div class="hero-container">
+        <div class="glass-box">
+            <h1>Asha Ornaments</h1>
+            <p class="subtitle">Handcrafted Perfection</p>
+            <a href="shop.html" class="shop-btn">View Collection</a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="heart-msg">Made by ❤️ of a teacher</div>
+        <div>
+            Need help? <span class="email-copy" onclick="copyEmail()">ashascollection@gmail.com</span>
+        </div>
+    </footer>
+
+    <div id="toast">Email Copied!</div>
+
+    <script>
+        function copyEmail() {
+            navigator.clipboard.writeText("ashascollection@gmail.com");
+            const toast = document.getElementById("toast");
+            toast.className = "show";
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+    </script>
+</body>
+</html>
